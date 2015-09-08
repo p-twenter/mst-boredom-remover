@@ -19,6 +19,8 @@ namespace mst_boredom_remover
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D pic;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -47,6 +49,7 @@ namespace mst_boredom_remover
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            pic = Content.Load<Texture2D>("498880");
             // TODO: use this.Content to load your game content here
         }
 
@@ -84,7 +87,11 @@ namespace mst_boredom_remover
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(pic, new Vector2(0, 0), Color.White);
 
+            
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
