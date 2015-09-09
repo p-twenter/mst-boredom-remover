@@ -10,17 +10,18 @@ namespace mst_boredom_remover
         public int id;
         public UnitType type;
         public double health;
+        public Position position;
 
         public enum Status
         {
-            Gaurding,
+            Idle,
             FightMoving,
-            Walking,
+            Moving,
             Hiding,
+            Attacking,
             Dead
         };
-        public Status satus;
-        public Position target_position;
+        public Status status;
         public Player owner;
         public List<Order> orders;
 

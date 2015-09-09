@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Order.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="TileType.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="UnitType.cs" />
+    <Compile Include="Update.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

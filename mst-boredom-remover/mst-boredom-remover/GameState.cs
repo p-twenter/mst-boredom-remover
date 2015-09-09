@@ -11,5 +11,6 @@ namespace mst_boredom_remover
         public Map map;
         public List<Player> players;
         public List<Unit> units;
+        public List<Update> updates;
     }
 }
