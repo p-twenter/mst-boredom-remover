@@ -20,9 +20,9 @@ namespace mst_boredom_remover
     }
     public class Button
     {
-        Texture2D texture;
-        public bool visible = true;
-        Vector2 position;
+        private Texture2D texture;
+        private bool visible = true;
+        private Vector2 position;
         // stores the last mouse state
         private MouseState previousState;
 
@@ -58,8 +58,8 @@ namespace mst_boredom_remover
             this.bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height); // set the bounds
         }
 
-
-        public void Update(GameTime gameTime) // update method for buttons
+        // update button state/fire events as necessary
+        public void Update(GameTime gameTime)
         {
             if (visible)
             {
@@ -71,139 +71,99 @@ namespace mst_boredom_remover
 
                 bool isMouseOver = bounds.Contains(MouseX, MouseY); // check if the mouse is touching the button
 
-                // update the button state
-                if (isMouseOver && state != ButtonStatus.Pressed)
+                if (isMouseOver)
                 {
-                    state = ButtonStatus.MouseOver; // button uses the mouseover state
-                }
-                // if the button state does not have a mouse over it and has not been clicked
-                else if (!isMouseOver && state != ButtonStatus.Pressed)
-                {
-                    state = ButtonStatus.Normal; // button uses the normal button state
-                }
+                    // update the button state
+                    if (state != ButtonStatus.Pressed)
+                    {
+                        state = ButtonStatus.MouseOver; // button uses the mouseover state
+                    }                    
 
-                // check if player holds down button
-                if (mouseState.LeftButton == ButtonState.Pressed && previousState.LeftButton == ButtonState.Released)
-                {
-                    if (isMouseOver)
+                    // check if player begins to hold the button
+                    if (mouseState.LeftButton == ButtonState.Pressed && previousState.LeftButton == ButtonState.Released)
                     {
                         // update the button state
                         state = ButtonStatus.Pressed;
 
                         if (OnPress != null)
                         {
-                            // do the OnPress event
+                            // player has begun holding the button down, fire press event
                             OnPress(this, EventArgs.Empty);
                         }
                     }
-                }
 
-                // check if the player releases the button
-                if (mouseState.LeftButton == ButtonState.Released && previousState.LeftButton == ButtonState.Pressed)
-                {
-                    if (isMouseOver)
+                    // check if the player releases the click on the button
+                    else if (mouseState.LeftButton == ButtonState.Released && previousState.LeftButton == ButtonState.Pressed)
                     {
                         // update the button state
                         state = ButtonStatus.MouseOver;
 
                         if (Clicked != null)
                         {
-                            // do the clicked event
+                            // layer has stopped holding down the button, fire click event
                             Clicked(this, EventArgs.Empty);
                         }
-                    }
-                    // if the button has been clicked
-                    else if (state == ButtonStatus.Pressed)
-                    {
-                        state = ButtonStatus.Normal;
+
+                        // if the button has been clicked
+                        else if (state == ButtonStatus.Pressed)
+                        {
+                            state = ButtonStatus.Normal;
+                        }
                     }
                 }
+                // mouse is not on the button
+                else // !isMouseOver
+                {
+                    if (state != ButtonStatus.Pressed)
+                    {
+                        state = ButtonStatus.Normal; // button uses the normal button state
+                    }
+                }
+
                 previousState = mouseState;
             }
         } // end update method
-        public void Draw(SpriteBatch spriteBatch, int special = 0)
-        {
-            switch (special)
+        public void Draw(SpriteBatch spriteBatch)
+        {   
+            if (visible)
             {
-                case 0:
-                    if (visible)
-                    {
-                        // draw the button using a switch on the status of the button
-                        switch (state)
-                        {
-                            // draw the normal state of the button
-                            case ButtonStatus.Normal:
-                                spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
-                                break;
-                            // draw the mouseover state of the button
-                            case ButtonStatus.MouseOver:
-                                spriteBatch.Draw(hoverTexture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
-                                break;
-                            // draw the pressed state of the button
-                            case ButtonStatus.Pressed:
-                                spriteBatch.Draw(pressedTexture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
-                                break;
-                            default:
-                                spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
-                                break;
-                        }
-                    }
-                    break;
-                case 1:
-                    if (visible)
-                    {
-                        // draw the button using a switch on the status of the button
-                        switch (state)
-                        {
-                            // draw the normal state of the button
-                            case ButtonStatus.Normal:
-                                spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, 75, 75), Color.White);
-                                //spriteBatch.Draw(texture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            // draw the mouseover state of the button
-                            case ButtonStatus.MouseOver:
-                                spriteBatch.Draw(hoverTexture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            // draw the pressed state of the button
-                            case ButtonStatus.Pressed:
-                                spriteBatch.Draw(pressedTexture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            default:
-                                spriteBatch.Draw(texture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                        }
-                    }
-                    break;
-                case 2:
-                    if (visible)
-                    {
-                        // draw the button using a switch on the status of the button
-                        switch (state)
-                        {
-                            // draw the normal state of the button
-                            case ButtonStatus.Normal:
-                                spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, 25, 25), Color.White);
-                                //spriteBatch.Draw(texture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            // draw the mouseover state of the button
-                            case ButtonStatus.MouseOver:
-                                spriteBatch.Draw(hoverTexture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            // draw the pressed state of the button
-                            case ButtonStatus.Pressed:
-                                spriteBatch.Draw(pressedTexture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                            default:
-                                spriteBatch.Draw(texture, new Vector2((int)position.X, (int)position.Y), Color.White);
-                                break;
-                        }
-                    }
-                    break;
+                // draw the button using a switch on the status of the button
+                switch (state)
+                {
+                    // draw the normal state of the button
+                    case ButtonStatus.Normal:
+                        spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
+                        break;
+                    // draw the mouseover state of the button
+                    case ButtonStatus.MouseOver:
+                        spriteBatch.Draw(hoverTexture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
+                        break;
+                    // draw the pressed state of the button
+                    case ButtonStatus.Pressed:
+                        spriteBatch.Draw(pressedTexture, new Rectangle((int)position.X, (int)position.Y, 100, 35), Color.White);
+                        break;
+                    // impossible case
+                    default:
+                        break;
+                }
             }
         }
-        public void ChangeTexture(Texture2D texture)
+        public void ChangeTexture(Texture2D texture, Texture2D hoverTexture, Texture2D pressedTexture)
         {
             this.texture = texture;
+            this.hoverTexture = hoverTexture;
+            this.pressedTexture = pressedTexture;
+        }
+        public void toggleVisibility()
+        {
+            if (visible)
+            {
+                visible = false;
+            }
+            else
+            {
+                visible = true;
+            }
         }
     }
 }

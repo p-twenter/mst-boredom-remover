@@ -19,7 +19,7 @@ namespace mst_boredom_remover
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D pic;
+        Button testButton;
 
         public Game1()
         {
@@ -49,7 +49,14 @@ namespace mst_boredom_remover
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            pic = Content.Load<Texture2D>("498880");
+            IsMouseVisible = true;
+
+            Texture2D testBtnTexture = Content.Load<Texture2D>("Buttons\\BtnNew");
+            Texture2D testBtnTextureHover = Content.Load<Texture2D>("Buttons\\BtnNewHover");
+
+            testButton = new Button(testBtnTexture, testBtnTextureHover, testBtnTextureHover, new Vector2(100,100));
+            testButton.OnPress += new EventHandler(testButton_OnPress);
+            testButton.Clicked += new EventHandler(testButton_Clicked);
             // TODO: use this.Content to load your game content here
         }
 
@@ -70,8 +77,12 @@ namespace mst_boredom_remover
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 this.Exit();
+            }
+
+            testButton.Update(gameTime);
 
             // TODO: Add your update logic here
 
@@ -84,15 +95,23 @@ namespace mst_boredom_remover
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.MediumSlateBlue);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(pic, new Vector2(0, 0), Color.White);
 
+            testButton.Draw(spriteBatch);
             
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+        public void testButton_Clicked(object sender, EventArgs e)
+        {
+            this.Exit();
+        }
+        public void testButton_OnPress(object sender, EventArgs e)
+        {
+
         }
     }
 }
