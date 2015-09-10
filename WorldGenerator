@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication2
+{
+    public class BiomeInfo
+    {
+        char type;
+        int x;
+        int y;
+    }
+    
+    class PlainMap
+    {
+        /*'P' is plains, 
+         'D' is desert,
+         'M' is Mountain,
+         'F' is Forest,
+         'T' is Tundra,
+         '%' is Dreadlands,
+        '~' is ocean/river.*/
+        static void Main(string[] args)
+        {
+            int MaxTileRange = 64;
+            char[,] field = new char[MaxTileRange, MaxTileRange];
+            BiomeInfo[] bio = new BiomeInfo[7];
+            bio[0].type = 'P';
+            bio[1].type = 'D';
+            bio[2].type = 'M';
+            bio[3].type = 'F';
+            bio[4].type = 'T';
+            bio[5].type = '%';
+            bio[6].type = '~';
+
+            for (int i = 0; i < MaxTileRange; i++)
+            {
+                for (int j = 0; j < MaxTileRange; j++)
+                {
+                   field[i, j] = bio[0].type;
+                }
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 25; j++)
+                {
+                    field[i+40, j+20] = bio[2].type;
+                }
+            }
+
+            for (int i = 0; i <25; i++)
+            {
+                for (int j = 0; j < 25; j++)
+                {
+                    field[i+70, j+50] = bio[1].type;
+                }
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 25; j++)
+                {
+                    field[i+20, j+35] = bio[3].type;
+                }
+            }
+
+            for (int i = 0; i < MaxTileRange; i++)
+            {
+                field[i, 0] = bio[6].type;
+                field[0, i] = bio[6].type;
+                field[i, MaxTileRange - 1] = bio[6].type;
+                field[MaxTileRange - 1, i] = bio[6].type;
+            }
+
+            for (int i = 0; i < MaxTileRange; i++)
+            {
+                for (int j = 0; j < MaxTileRange; j++)
+                {
+                    Console.Write(field[i, j]);
+                }
+                Console.WriteLine();
+            }
+            Console.ReadKey();
+
+        }
+    }
+}
